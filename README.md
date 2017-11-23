@@ -24,7 +24,6 @@ module "mongo_backup" {
   stage                              = "${var.stage}"
   namespace                          = "${var.namespace}"
   vpc_id                             = "${var.vpc_id}"
-  mongo_mount_target_id                = "${var.mongo_mount_target_id}"
   use_ip_address                     = "false"
   noncurrent_version_expiration_days = "${var.noncurrent_version_expiration_days}"
   ssh_key_pair                       = "${var.ssh_key_pair}"
@@ -79,10 +78,10 @@ To enable connectivity between the `DataPipeline` instances and the `mongo`, use
 module "mongo_backup" {
   source     = "git::https://github.com/ITSvitCo/terraform-aws-mongo-backup.git?ref=master"
   name       = "${var.name}"
-  stage      = "${terraform.workspace}"
+  stage      = "${var.stage}"
   namespace  = "${var.namespace}"
   delimiter  = "${var.delimiter}"
-  attributes = ["${compact(concat(var.attributes, list("mongo-backup")))}"]
+  attributes = ["${compact(concat(var.attributes, list("mongo"), list("backup")))}"]
   tags       = "${var.tags}"
 
   # Important to set it to `false` since we added the `DataPipeline` SG (output of the `mongo_backup` module) to the `security_groups` of the `mongo` module

@@ -1,7 +1,7 @@
 module "logs_label" {
   source     = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.2.1"
   namespace  = "${var.namespace}"
-  stage      = "${terraform.workspace}"
+  stage      = "${var.stage}"
   name       = "${var.name}"
   delimiter  = "${var.delimiter}"
   attributes = ["${compact(concat(var.attributes, list("logs")))}"]
@@ -17,7 +17,7 @@ resource "aws_s3_bucket" "logs" {
 module "backups_label" {
   source     = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.2.1"
   namespace  = "${var.namespace}"
-  stage      = "${terraform.workspace}"
+  stage      = "${var.stage}"
   name       = "${var.name}"
   delimiter  = "${var.delimiter}"
   attributes = ["${compact(concat(var.attributes, list("backups")))}"]
