@@ -49,6 +49,7 @@ resource "aws_cloudformation_stack" "datapipeline" {
     myDataPipelineRole         = "${aws_iam_role.role.name}"
     myKeyPair                  = "${var.ssh_key_pair}"
     myPeriod                   = "${var.datapipeline_config["period"]}"
+    myStartDateTime            = "${var.datapipeline_config["startDateTime"]}"
     Tag                        = "${module.label.id}"
     myExecutionTimeout         = "${var.datapipeline_config["timeout"]}"
   }
