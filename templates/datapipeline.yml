@@ -41,15 +41,17 @@ Parameters:
     Type: String
   myPeriod:
     Type: String
+  myStartDateTime:
+    Type: String
   myExecutionTimeout:
     Type: String
 
 
 Resources:
-  DataPipelineMongoBackupPartial:
+  DataPipelineMongoBackup:
     Type: AWS::DataPipeline::Pipeline
     Properties:
-      Name: DataPipelineMongoBackupPartial
+      Name: DataPipelineMongoBackup
       Description: DataPipeline MongoDB Backup
       PipelineTags:
         - Key: Name
@@ -96,8 +98,8 @@ Resources:
           Fields:
             - Key: type
               StringValue: Schedule
-            - Key: startAt
-              StringValue: FIRST_ACTIVATION_DATE_TIME
+            - Key: startDateTime
+              StringValue: "#{myStartDateTime}"
             - Key: period
               StringValue: "#{myPeriod}"
         - Id: ShellCommandActivityObj
@@ -117,12 +119,12 @@ Resources:
                 dbname="$6"
                 dbcollection="$7"
                 query="$8"
-                [[ -d /backup-partial ]] || sudo mkdir /backup-partial
+                [[ -d /backup-partial ]] || sudo mkdir /backup
                 sudo yum-config-manager --add-repo https://repo.mongodb.org/yum/amazon/2013.03/mongodb-org/3.2/x86_64/
                 sudo rpm --import https://www.mongodb.org/static/pgp/server-3.2.asc
                 sudo yum -y install mongodb-org-tools
-                sudo mongodump -h $source:27017 -u $user -p $password --authenticationDatabase admin -d $dbname -c $dbcollection -q $query -o /backup-partial/
-                sudo aws s3 sync --delete --exact-timestamps /backup-partial/ s3://$destination/
+                sudo mongodump -h $source:27017 -u $user -p $password --authenticationDatabase admin -d $dbname -c $dbcollection -q $query -o /backup/
+                sudo aws s3 sync --delete --exact-timestamps /backup/ s3://$destination/
                 backup_status="$?"
                 # Return code 2 means that the following were skipped:
                 # files/symlinks that do not exist, files that are character special devices, block special device, FIFO's, or sockets, and files that the user cannot read from
@@ -222,6 +224,14 @@ Resources:
               StringValue: "360 Minutes"
             - Key: description
               StringValue: Terminate the resource after this period.
+        - Id: myStartDateTime
+          Attributes:
+            - Key: type
+              StringValue: String
+            - Key: default
+              StringValue: "2017-12-01T00:00:00"
+            - Key: description
+              StringValue: Start at date/time.
         - Id: mySubnetId
           Attributes:
             - Key: type
@@ -275,7 +285,7 @@ Resources:
             - Key: type
               StringValue: String
             - Key: default
-              StringValue: hz
+              StringValue: abc
             - Key: description
               StringValue: DB colllection.
         - Id: myDBquery
@@ -283,7 +293,7 @@ Resources:
             - Key: type
               StringValue: String
             - Key: default
-              StringValue: hz
+              StringValue: abc
             - Key: description
               StringValue: DB query.
         - Id: myRegion
