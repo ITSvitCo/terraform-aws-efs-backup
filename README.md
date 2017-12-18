@@ -24,7 +24,6 @@ module "mongo_backup" {
   stage                              = "${var.stage}"
   namespace                          = "${var.namespace}"
   vpc_id                             = "${var.vpc_id}"
-  mongo_mount_target_id              = "${var.mongo_mount_target_id}"
   use_ip_address                     = "false"
   noncurrent_version_expiration_days = "${var.noncurrent_version_expiration_days}"
   ssh_key_pair                       = "${var.ssh_key_pair}"
@@ -46,14 +45,13 @@ output "mongo_backup_security_group" {
 | stage                              | ``             | Stage (e.g. `prod`, `dev`, `staging`)                                                         | Yes      |
 | name                               | ``             | Name  (e.g. `app` or `wordpress`)                                                             | Yes      |
 | region                             | `us-east-1`    | (Optional) AWS Region. If not specified, will be derived from 'aws_region' data source        | No       |
-| vpc_id                             | ``             | AWS VPC ID where module should operate (_e.g._ `vpc-a22222ee`)                                | Yes      |
-| mongo_mount_target_id              | ``             | Elastic File System Mount Target ID (_e.g._ `fsmt-279bfc62`)                                  | Yes      |
+| vpc_id                             | ``             | AWS VPC ID where module should operate (e.g. `vpc-a22222ee`)                                | Yes      |
 | use_ip_address                     | `false`        | If set to `true`, will use IP address instead of DNS name to connect to the `mongo`           | Yes      |
 | modify_security_group              | `false`        | Should the module modify the `mongo` security group                                           | No       |
 | noncurrent_version_expiration_days | `35`           | S3 object versions expiration period (days)                                                   | Yes      |
 | ssh_key_pair                       | ``             | `SSH` key that will be deployed on DataPipeline's instance                                    | No       |
 | datapipeline_config                | `${map("instance_type", "t2.micro", "email", "", "period", "24 hours", "timeout", "60 Minutes")}"`| DataPipeline configuration options  | Yes      |
-| attributes                         | `[]`           | Additional attributes (_e.g._ `mongo-backup`)                                                 | No       |
+| attributes                         | `[]`           | Additional attributes (e.g. `["mongo", "backup"]`)                                                 | No       |
 | tags                               | `{}`           | Additional tags (e.g. `map("BusinessUnit","XYZ")`                                             | No       |
 | delimiter                          | `-`            | Delimiter to be used between `name`, `namespace`, `stage` and `attributes`                    | No       |
 
