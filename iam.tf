@@ -14,7 +14,7 @@ data "aws_iam_policy_document" "resource_role" {
 module "resource_role_label" {
   source    = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.2.1"
   namespace = "${var.namespace}"
-  stage     = "${terraform.workspace}"
+  stage     = "${var.stage}"
   name      = "${var.name}"
   delimiter = "${var.delimiter}"
 
@@ -58,7 +58,7 @@ data "aws_iam_policy_document" "role" {
 module "role_label" {
   source    = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.2.1"
   namespace = "${var.namespace}"
-  stage     = "${terraform.workspace}"
+  stage     = "${var.stage}"
   name      = "${var.name}"
   delimiter = "${var.delimiter}"
 
