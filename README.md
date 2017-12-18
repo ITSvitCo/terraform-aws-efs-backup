@@ -39,6 +39,9 @@ output "mongo_backup_security_group" {
 
 ## Variables
 
+**Note:** If one of `dbname`, `dbcollection` or `dbquery` is not specified -
+a full backup will be launched
+
 | Name                               |      Default       | Description                                                                            | Required |
 |:-----------------------------------|:------------------:|:---------------------------------------------------------------------------------------|:--------:|
 | namespace                          |         ``         | Namespace (e.g. `cp` or `cloudposse`)                                                  |   Yes    |
@@ -56,9 +59,9 @@ output "mongo_backup_security_group" {
 | delimiter                          |        `-`         | Delimiter to be used between `name`, `namespace`, `stage` and `attributes`             |    No    |
 | dbuser                             |         ``         | Username for accessing MongoDB (e.g. `root`)                                           |   Yes    |
 | dbpassword                         |         ``         | Password for accessing MongoDB (e.g. `password`)                                       |   Yes    |
-| dbname                             |         ``         | MongoDB Database name (e.g. `testdb`)                                                  |   Yes    |
-| dbcollection                       |         ``         | MongoDB collection name (e.g. `testcollection`)                                        |   Yes    |
-| dbquery                            |         ``         | MongoDB query  (e.g. `"{$or:[{\"_type\":\"is:role\"},{\"_type\":\"is:template\"}]}"`)  |   Yes    |
+| dbname                             |         ``         | MongoDB Database name (e.g. `testdb`)                                                  |    No    |
+| dbcollection                       |         ``         | MongoDB collection name (e.g. `testcollection`)                                        |    No    |
+| dbquery                            |         ``         | MongoDB query  (e.g. `"{$or:[{\"_type\":\"is:role\"},{\"_type\":\"is:template\"}]}"`)  |    No    |
 
 
 ### `datapipeline_config` variables
