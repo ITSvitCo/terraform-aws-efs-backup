@@ -123,7 +123,13 @@ Resources:
                 sudo yum-config-manager --add-repo https://repo.mongodb.org/yum/amazon/2013.03/mongodb-org/3.2/x86_64/
                 sudo rpm --import https://www.mongodb.org/static/pgp/server-3.2.asc
                 sudo yum -y install mongodb-org-tools
-                sudo mongodump -h $source:27017 -u $user -p $password --authenticationDatabase admin -d $dbname -c $dbcollection -q $query -o /backup/
+                if [[ (-n $dbname) -a (-n $dbcollection) -a (-n $query) ]]; then
+                  # Do partial backup
+                  sudo mongodump -h $source:27017 -u $user -p $password --authenticationDatabase admin -d $dbname -c $dbcollection -q $query -o /backup/
+                else
+                  # Do full backup
+                  sudo mongodump -h $source:27017 -u $user -p $password -o /backup/
+                fi
                 sudo aws s3 sync --delete --exact-timestamps /backup/ s3://$destination/
                 backup_status="$?"
                 # Return code 2 means that the following were skipped:
