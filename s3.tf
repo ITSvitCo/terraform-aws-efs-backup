@@ -4,7 +4,7 @@ module "logs_label" {
   stage      = "${var.stage}"
   name       = "${var.name}"
   delimiter  = "${var.delimiter}"
-  attributes = ["${compact(concat(var.attributes, list("partial-logs")))}"]
+  attributes = ["${compact(concat(var.attributes, list("logs")))}"]
   tags       = "${var.tags}"
 }
 
@@ -20,11 +20,11 @@ module "backups_label" {
   stage      = "${var.stage}"
   name       = "${var.name}"
   delimiter  = "${var.delimiter}"
-  attributes = ["${compact(concat(var.attributes, list("partial-backups")))}"]
+  attributes = ["${compact(concat(var.attributes, list("backups")))}"]
   tags       = "${var.tags}"
 }
 
-resource "aws_s3_bucket" "partial_backups" {
+resource "aws_s3_bucket" "backups" {
   bucket = "${module.backups_label.id}"
   tags   = "${module.backups_label.tags}"
 
