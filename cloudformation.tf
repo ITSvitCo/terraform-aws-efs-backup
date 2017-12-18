@@ -4,7 +4,7 @@ module "sns_label" {
   stage      = "${var.stage}"
   name       = "${var.name}"
   delimiter  = "${var.delimiter}"
-  attributes = ["${compact(concat(var.attributes, list("partial-sns")))}"]
+  attributes = ["${compact(concat(var.attributes, list("sns")))}"]
   tags       = "${var.tags}"
 }
 
@@ -25,7 +25,7 @@ module "datapipeline_label" {
   stage      = "${var.stage}"
   name       = "${var.name}"
   delimiter  = "${var.delimiter}"
-  attributes = ["${compact(concat(var.attributes, list("partial-datapipeline")))}"]
+  attributes = ["${compact(concat(var.attributes, list("datapipeline")))}"]
   tags       = "${var.tags}"
 }
 
@@ -51,6 +51,7 @@ resource "aws_cloudformation_stack" "datapipeline" {
     myDataPipelineResourceRole = "${aws_iam_instance_profile.resource_role.name}"
     myDataPipelineRole         = "${aws_iam_role.role.name}"
     myKeyPair                  = "${var.ssh_key_pair}"
+    myStartDateTime            = "${var.datapipeline_config["startDateTime"]}"
     myPeriod                   = "${var.datapipeline_config["period"]}"
     Tag                        = "${module.label.id}"
     myExecutionTimeout         = "${var.datapipeline_config["timeout"]}"
