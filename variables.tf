@@ -31,28 +31,28 @@ variable "security_group_id" {
 }
 
 variable "dbuser" {
-  type = "string"
+  type        = "string"
   description = "Username for accessing MongoDB (e.g. `root`)"
 }
 
 variable "dbpassword" {
-  type = "string"
+  type        = "string"
   description = "Password for accessing MongoDB (e.g. `password`)"
 }
 
 variable "dbname" {
-  type = "string"
+  type        = "string"
   description = "MongoDB Database name (e.g. `testdb`)"
 }
 
 variable "dbcollection" {
-  type = "string"
+  type        = "string"
   description = "MongoDB collection name (e.g. `testcollection`)"
 }
 
 variable "dbquery" {
-  type = "string"
-  description = "MongoDB query  (e.g. `"{$or:[{\"_type\":\"is:role\"},{\"_type\":\"is:template\"}]}"`)"
+  type        = "string"
+  description = "MongoDB query  (e.g. `{$or:[{\"_type\":\"is:role\"},{\"_type\":\"is:template\"}]}`)"
 }
 
 variable "datapipeline_config" {
