@@ -405,9 +405,11 @@ Resources:
           StringValue: !Ref myTopicArn
         - Id: myKeyPair
           StringValue: !Ref myKeyPair
+        - Id: myStartDateTime
+          StringValue: !Ref myStartDateTime
         - Id: myPeriod
           StringValue: !Ref myPeriod
 
 Outputs:
   DataPipelineId:
-    Value: !Ref DataPipelineMongoBackupPartial
+    Value: !Ref DataPipelineMongoBackup
