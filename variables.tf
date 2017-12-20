@@ -67,6 +67,10 @@ variable "datapipeline_config" {
   }
 }
 
+variable "backup_enabled" {
+  default = "true"
+}
+
 variable "modify_security_group" {
   default = "false"
 }

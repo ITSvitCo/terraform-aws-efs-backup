@@ -1,3 +1,7 @@
+locals {
+  resource_count = "${var.backup_enabled == "true" ? 1 : 0}"
+}
+
 data "aws_region" "default" {
   current = true
 }

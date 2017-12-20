@@ -9,6 +9,7 @@ module "logs_label" {
 }
 
 resource "aws_s3_bucket" "logs" {
+  count         = "${local.resource_count}"
   bucket        = "${module.logs_label.id}"
   force_destroy = "true"
   tags          = "${module.logs_label.tags}"
@@ -25,6 +26,7 @@ module "backups_label" {
 }
 
 resource "aws_s3_bucket" "backups" {
+  count  = "${local.resource_count}"
   bucket = "${module.backups_label.id}"
   tags   = "${module.backups_label.tags}"
 

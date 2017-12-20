@@ -9,6 +9,7 @@ module "sns_label" {
 }
 
 resource "aws_cloudformation_stack" "sns" {
+  count         = "${local.resource_count}"
   name          = "${module.sns_label.id}"
   template_body = "${file("${path.module}/templates/sns.yml")}"
 
@@ -30,6 +31,7 @@ module "datapipeline_label" {
 }
 
 resource "aws_cloudformation_stack" "datapipeline" {
+  count         = "${local.resource_count}"
   name          = "${module.datapipeline_label.id}"
   template_body = "${file("${path.module}/templates/datapipeline.yml")}"
 

@@ -22,18 +22,21 @@ module "resource_role_label" {
 }
 
 resource "aws_iam_role" "resource_role" {
+  count              = "${local.resource_count}"
   name               = "${module.resource_role_label.id}"
   assume_role_policy = "${data.aws_iam_policy_document.resource_role.json}"
 }
 
 resource "aws_iam_role_policy_attachment" "resource_role" {
+  count      = "${local.resource_count}"
   role       = "${aws_iam_role.resource_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforDataPipelineRole"
 }
 
 resource "aws_iam_instance_profile" "resource_role" {
-  name = "${module.resource_role_label.id}"
-  role = "${aws_iam_role.resource_role.name}"
+  count = "${local.resource_count}"
+  name  = "${module.resource_role_label.id}"
+  role  = "${aws_iam_role.resource_role.name}"
 }
 
 data "aws_iam_policy_document" "role" {
@@ -64,11 +67,13 @@ module "role_label" {
 }
 
 resource "aws_iam_role" "role" {
+  count              = "${local.resource_count}"
   name               = "${module.role_label.id}"
   assume_role_policy = "${data.aws_iam_policy_document.role.json}"
 }
 
 resource "aws_iam_role_policy_attachment" "role" {
+  count      = "${local.resource_count}"
   role       = "${aws_iam_role.role.name}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSDataPipelineRole"
 }
