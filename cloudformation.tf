@@ -43,7 +43,7 @@ resource "aws_cloudformation_stack" "datapipeline" {
     myDBname                   = "${var.dbname}"
     myDBcollection             = "${var.dbcollection}"
     myDBquery                  = "${var.dbquery}"
-    myS3BackupsBucket          = "${aws_s3_bucket.partial_backups.id}"
+    myS3BackupsBucket          = "${aws_s3_bucket.backups.id}"
     myRegion                   = "${signum(length(var.region)) == 1 ? var.region : data.aws_region.default.name}"
     myImageId                  = "${data.aws_ami.amazon_linux.id}"
     myTopicArn                 = "${aws_cloudformation_stack.sns.outputs["TopicArn"]}"
