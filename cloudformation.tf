@@ -6,6 +6,7 @@ module "sns_label" {
   delimiter  = "${var.delimiter}"
   attributes = ["${compact(concat(var.attributes, list("sns")))}"]
   tags       = "${var.tags}"
+  enabled    = "${var.backup_enabled == "true" ? "true" : "false"}"
 }
 
 resource "aws_cloudformation_stack" "sns" {
@@ -28,6 +29,7 @@ module "datapipeline_label" {
   delimiter  = "${var.delimiter}"
   attributes = ["${compact(concat(var.attributes, list("datapipeline")))}"]
   tags       = "${var.tags}"
+  enabled    = "${var.backup_enabled == "true" ? "true" : "false"}"
 }
 
 resource "aws_cloudformation_stack" "datapipeline" {

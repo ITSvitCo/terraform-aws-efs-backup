@@ -14,6 +14,7 @@ module "label" {
   delimiter  = "${var.delimiter}"
   attributes = "${var.attributes}"
   tags       = "${var.tags}"
+  enabled    = "${var.backup_enabled == "true" ? "true" : "false"}"
 }
 
 data "aws_ami" "amazon_linux" {

@@ -19,6 +19,7 @@ module "resource_role_label" {
   delimiter  = "${var.delimiter}"
   attributes = ["${compact(concat(var.attributes, list("resource"), list("role")))}"]
   tags       = "${var.tags}"
+  enabled    = "${var.backup_enabled == "true" ? "true" : "false"}"
 }
 
 resource "aws_iam_role" "resource_role" {
@@ -64,6 +65,7 @@ module "role_label" {
   delimiter  = "${var.delimiter}"
   attributes = ["${compact(concat(var.attributes, list("role")))}"]
   tags       = "${var.tags}"
+  enabled    = "${var.backup_enabled == "true" ? "true" : "false"}"
 }
 
 resource "aws_iam_role" "role" {

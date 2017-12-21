@@ -6,6 +6,7 @@ module "logs_label" {
   delimiter  = "${var.delimiter}"
   attributes = ["${compact(concat(var.attributes, list("logs")))}"]
   tags       = "${var.tags}"
+  enabled    = "${var.backup_enabled == "true" ? "true" : "false"}"
 }
 
 resource "aws_s3_bucket" "logs" {
@@ -23,6 +24,7 @@ module "backups_label" {
   delimiter  = "${var.delimiter}"
   attributes = ["${compact(concat(var.attributes, list("backups")))}"]
   tags       = "${var.tags}"
+  enabled    = "${var.backup_enabled == "true" ? "true" : "false"}"
 }
 
 resource "aws_s3_bucket" "backups" {
