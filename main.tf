@@ -46,3 +46,12 @@ data "aws_ami" "amazon_linux" {
     values = ["gp2"]
   }
 }
+
+data "aws_ami" "amazon_linux_mongo" {
+  most_recent = "true"
+
+  filter {
+    name   = "name"
+    values = ["amazon_linux_mongo"]
+  }
+}
