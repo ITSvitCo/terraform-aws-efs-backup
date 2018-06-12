@@ -23,9 +23,11 @@ Parameters:
     Type: String
   myDBquery:
     Type: String
-  myDBatlasShared:
+  myDBssl:
     Type: String
-  myDBatlasReplicaset:
+  myDBport:
+    Type: String
+  myDBversion:
     Type: String
   myRegion:
     Type: String
@@ -123,43 +125,29 @@ Resources:
                 dbname="$6"
                 dbcollection="$7"
                 query="$8"
-                atlas_shared="$9"
-                atlas_replicaset="$10"
+                ssl="$9"
+                port="$10"
+                version="$11"
                 [[ -d /backup-partial ]] || sudo mkdir /backup
-                if [ $atlas_shared = "true" ] || [ $atlas_replicaset = "true" ]; then
-                 sudo yum-config-manager --add-repo https://repo.mongodb.org/yum/amazon/2013.03/mongodb-org/3.6/x86_64/
-                 sudo rpm --import https://www.mongodb.org/static/pgp/server-3.6.asc
-                 sudo yum -y install mongodb-org-tools
-                else
-                 sudo yum-config-manager --add-repo https://repo.mongodb.org/yum/amazon/2013.03/mongodb-org/3.2/x86_64/
-                 sudo rpm --import https://www.mongodb.org/static/pgp/server-3.2.asc
-                 sudo yum -y install mongodb-org-tools
-                fi
-                if [ $atlas_shared = "true" ]; then
-                 # if [[ (-n $dbname) -a (-n $dbcollection) -a (-n $query) ]]; then
-                 if [ $dbname != "none" ] || [ $dbcollection != "none" ] || [ $query != "none" ]; then
-                   # Do partial backup
-                   sudo mongodump -h $source:27016 -u $user -p $password --authenticationDatabase admin -d $dbname -c $dbcollection -q $query -o /backup/ --ssl
+                sudo yum-config-manager --add-repo https://repo.mongodb.org/yum/amazon/2013.03/mongodb-org/$version/x86_64/
+                sudo rpm --import https://www.mongodb.org/static/pgp/server-$version.asc
+                sudo yum -y install mongodb-org-tools
+                # if [[ (-n $dbname) -a (-n $dbcollection) -a (-n $query) ]]; then
+                if [ $dbname != "none" ] || [ $dbcollection != "none" ] || [ $query != "none" ]; then
+                 if [ $ssl = "true" ]; then
+                  # Do partial backup
+                  sudo mongodump -h $source:$port -u $user -p $password --authenticationDatabase admin -d $dbname -c $dbcollection -q $query -o /backup/ --ssl
                  else
-                   # Do full backup
-                   sudo mongodump -h $source:27016 -u $user -p $password -o /backup/ --ssl
-                 fi
-                elif [ $atlas_replicaset = "true" ]; then
-                 if [ $dbname != "none" ] || [ $dbcollection != "none" ] || [ $query != "none" ]; then
-                   # Do partial backup
-                   sudo mongodump -h $source:27017 -u $user -p $password --authenticationDatabase admin -d $dbname -c $dbcollection -q $query -o /backup/ --ssl
-                 else
-                   # Do full backup
-                   sudo mongodump -h $source:27017 -u $user -p $password -o /backup/ --ssl
+                  # Do partial backup
+                  sudo mongodump -h $source:$port -u $user -p $password --authenticationDatabase admin -d $dbname -c $dbcollection -q $query -o /backup/
                  fi
                 else
-                 # if [[ (-n $dbname) -a (-n $dbcollection) -a (-n $query) ]]; then
-                 if [ $dbname != "none" ] || [ $dbcollection != "none" ] || [ $query != "none" ]; then
-                   # Do partial backup
-                   sudo mongodump -h $source:27017 -u $user -p $password --authenticationDatabase admin -d $dbname -c $dbcollection -q $query -o /backup/
+                 if [ $ssl = "true" ]; then
+                  # Do full backup
+                  sudo mongodump -h $source:$port -u $user -p $password -o /backup/ --ssl
                  else
-                   # Do full backup
-                   sudo mongodump -h $source:27017 -u $user -p $password -o /backup/
+                  # Do full backup
+                  sudo mongodump -h $source:$port -u $user -p $password -o /backup/
                  fi
                 fi
                 sudo aws s3 sync --delete --exact-timestamps /backup/ s3://$destination/
@@ -190,9 +178,11 @@ Resources:
             - Key: scriptArgument
               StringValue: "#{myDBquery}"
             - Key: scriptArgument
-              StringValue: "#{myDBatlasShared}"
+              StringValue: "#{myDBssl}"
             - Key: scriptArgument
-              StringValue: "#{myDBatlasReplicaset}"
+              StringValue: "#{myDBport}"
+            - Key: scriptArgument
+              StringValue: "#{myDBversion}"
             - Key: onSuccess
               RefValue: SuccessNotify
             - Key: onFail
@@ -338,22 +328,30 @@ Resources:
               StringValue: none
             - Key: description
               StringValue: DB query.
-        - Id: myDBatlasShared
+        - Id: myDBssl
           Attributes:
             - Key: type
               StringValue: String
             - Key: default
               StringValue: none
             - Key: description
-              StringValue: DB atlas-shared.
-        - Id: myDBatlasReplicaset
+              StringValue: DB ssl.
+        - Id: myDBport
           Attributes:
             - Key: type
               StringValue: String
             - Key: default
               StringValue: none
             - Key: description
-              StringValue: DB atlas-replicaset.
+              StringValue: DB port.
+        - Id: myDBversion
+          Attributes:
+            - Key: type
+              StringValue: String
+            - Key: default
+              StringValue: none
+            - Key: description
+              StringValue: DB version.
         - Id: myRegion
           Attributes:
             - Key: type
@@ -447,10 +445,12 @@ Resources:
           StringValue: !Ref myDBcollection
         - Id: myDBquery
           StringValue: !Ref myDBquery
-        - Id: myDBatlasShared
-          StringValue: !Ref myDBatlasShared
-        - Id: myDBatlasReplicaset
-          StringValue: !Ref myDBatlasReplicaset
+        - Id: myDBssl
+          StringValue: !Ref myDBssl
+        - Id: myDBport
+          StringValue: !Ref myDBport
+        - Id: myDBversion
+          StringValue: !Ref myDBversion
         - Id: myRegion
           StringValue: !Ref myRegion
         - Id: myS3BackupsBucket
