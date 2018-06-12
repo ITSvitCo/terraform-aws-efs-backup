@@ -63,6 +63,11 @@ variable "dbversion" {
   description = "MongoDB version (e.g. `3.2`)"
 }
 
+variable "dbcollection" {
+  type        = "string"
+  description = "MongoDB collection name (e.g. `testcollection`)"
+}
+
 variable "dbquery" {
   type        = "string"
   description = "MongoDB query  (e.g. `{$or:[{\"_type\":\"is:role\"},{\"_type\":\"is:template\"}]}`)"
