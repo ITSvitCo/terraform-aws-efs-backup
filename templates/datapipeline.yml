@@ -126,8 +126,8 @@ Resources:
                 dbcollection="$7"
                 query="$8"
                 ssl="$9"
-                port="$10"
-                version="$11"
+                port="${10}"
+                version="${11}"
                 [[ -d /backup-partial ]] || sudo mkdir /backup
                 sudo yum-config-manager --add-repo https://repo.mongodb.org/yum/amazon/2013.03/mongodb-org/$version/x86_64/
                 sudo rpm --import https://www.mongodb.org/static/pgp/server-$version.asc
