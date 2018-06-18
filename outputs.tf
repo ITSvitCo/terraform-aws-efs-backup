@@ -7,7 +7,7 @@ output "backups_bucket_name" {
 }
 
 output "datapipeline_ids" {
-  value = "${join("", list(aws_cloudformation_stack.datapipeline.*.outputs["DataPipelineId"]))}"
+  value = "${join("", list(aws_cloudformation_stack.datapipeline.outputs["DataPipelineId"]))}"
 }
 
 output "security_group_id" {
