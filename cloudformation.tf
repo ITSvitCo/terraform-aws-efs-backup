@@ -52,7 +52,7 @@ resource "aws_cloudformation_stack" "datapipeline" {
     myDBversion                = "${var.dbversion}"
     myS3BackupsBucket          = "${aws_s3_bucket.backups.id}"
     myRegion                   = "${signum(length(var.region)) == 1 ? var.region : data.aws_region.default.name}"
-    myImageId                  = "${var.dbname == "none" ? data.aws_ami.amazon_linux_mongo.id : data.aws_ami.amazon_linux.id}"
+    myImageId                  = "${data.aws_ami.amazon_linux_mongo.id}"
     myTopicArn                 = "${aws_cloudformation_stack.sns.outputs["TopicArn"]}"
     myS3LogBucket              = "${aws_s3_bucket.logs.id}"
     myDataPipelineResourceRole = "${aws_iam_instance_profile.resource_role.name}"
